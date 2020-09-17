@@ -3,7 +3,7 @@ exports.up = async function (knex) {
     .createTable("users", (tbl) => {
         tbl.increments("id").unsigned().primary()
         tbl.text("username", 20).unique().notNullable()
-        tbl.text("password", 128).notNullable();
+        tbl.text("password").notNullable();
         tbl.text("phoneNumber").notNullable().unique()
     })
 
