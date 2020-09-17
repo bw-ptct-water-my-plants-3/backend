@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon --require dotenv/config index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
