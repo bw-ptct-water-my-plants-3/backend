@@ -18,8 +18,15 @@ function findById(id) {
         .first()
 }
 
+function find() {
+	return db("users").select("id", "username")
+}
+
+
+
 module.exports = {
     addUser,
     findBy,
-    findById
+    findById,
+    find
 }
