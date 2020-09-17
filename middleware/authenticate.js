@@ -1,30 +1,29 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 function restrict() {
+  return async (req, res, next) => {
+    const authError = {
+      message: "Invalid credentials",
+    };
 
-	return async (req, res, next) => {
-		const authError = {
-			message: "Invalid credentials",
-		}
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(401).json(authError);
+      }
 
-		try {
-			const token = req.headers.authorization
-			if (!token) {
-				return res.status(401).json(authError)
-			}
+      jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        if (err) {
+          return res.status(401).json(authError);
+        }
+        req.token = decoded;
 
-            jwt.verify(token, process.env.SECRET, (err, decoded) => {
-                if (err){
-                    return res.status(401).json(authError)
-                }
-                req.token = decoded
-
-                next()
-            })
-		} catch(err) {
-			next(err)
-		}
-	}
+        next();
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
-module.exports = restrict
+module.exports = restrict;
