@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "# JWTSIG SECRET=\"buildWeek\"",
   "main": "index.js",
   "scripts": {
     "server": "nodemon --require dotenv/config index.js",
