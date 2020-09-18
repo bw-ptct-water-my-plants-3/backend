@@ -16,7 +16,7 @@ exports.up = async function (knex) {
       .onDelete("CASCADE");
     tbl.text("nickname").notNullable();
     tbl.text("species").notNullable();
-    tbl.integer("h20Frequency").notNullable();
+    tbl.integer("h2oFrequency").notNullable();
     tbl.text("image"); //img src/ URL for now
   });
 };
