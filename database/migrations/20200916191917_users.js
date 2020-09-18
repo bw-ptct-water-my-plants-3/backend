@@ -21,7 +21,7 @@ exports.up = async function (knex) {
   });
 };
 
-exports.down = async function (knex) { 
-await knex.schema.dropTableIfExists("plants")
-await knex.schema.dropTableIfExists("users");
+exports.down = async function (knex) {
+  await knex.schema.dropTableIfExists("plants");
+  await knex.schema.dropTableIfExists("users");
 }; // make sure to add these "backwards/reverse"
