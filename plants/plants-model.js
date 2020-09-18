@@ -9,14 +9,18 @@ async function addPlant(plant) {
   return findById(id);
 }
 
-function findPlantById(id) {
+async function findPlantById(user_id, plant_id) {
   return db("plants")
-    .select("id", "nickname", "species", "h2oFrequency")
+    .where("id", plant_id)
+    .first()
+    .andWhere("user_id", user_id)
     .first();
 }
 
 function findPlantBy(filter) {
-  return db("plants").select("id", "nickname", "species", "h2oFrequency");
+  return db("plants")
+    .select("id", "nickname", "species", "h2oFrequency")
+    .where(filter);
 }
 
 async function updatePlant(id, updated) {
