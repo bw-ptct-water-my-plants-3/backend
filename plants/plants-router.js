@@ -10,7 +10,7 @@ router.get("/", restrict(), async (req, res, next) => {
   }
 });
 
-router.get("/:id", restrict(), async (req, res, next) => {
+router.get("/:id/plants", restrict(), async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -26,7 +26,7 @@ router.get("/:id", restrict(), async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id/plants", async (req, res, next) => {
   const { id } = req.params;
   const updateNickname = req.body.nickname;
   const updateSpecies = req.body.species;
@@ -54,6 +54,27 @@ router.put("/:id", async (req, res, next) => {
         });
     }
   });
+});
+
+router.post("/plants", async (req, res, next) => {
+  try {
+    const { nickname, species, h2oFrequency } = req.body;
+    const plant = await Plants.findPlantBy({ nickname }).first();
+
+    if (plant) {
+      return res.status(409).json({
+        message: "That plant already exists",
+      });
+    }
+    const newPlant = await Plants.addPlant({
+      nickname,
+      species,
+      h2oFrequency,
+    });
+    res.status(201).json(newPlant);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
