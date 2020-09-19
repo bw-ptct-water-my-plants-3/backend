@@ -26,4 +26,34 @@ router.get("/:id", restrict(), async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const updateNickname = req.body.nickname;
+  const updateSpecies = req.body.species;
+  const h2oFrequency = req.body.h2oFrequency;
+
+  const updateData = {
+    nickname: req.body.nickname,
+    species: req.body.species,
+    h2oFrequency: req.body.h2oFrequency,
+  };
+  if (!req.body.nickname || req.body.species || req.body.h2oFrequency) {
+    return res.status(400).json({ message: "All fields must are required" });
+  }
+  Plants.findPlantById(id).then((plant) => {
+    if (!plant) {
+      res.status(404).json({ message: "Could not find the specific plant" });
+    } else {
+      Plants.updatePlant(id, updateData);
+      res
+        .status(200)
+        .json({ message: `updated plant ${id}` })
+
+        .catch((err) => {
+          next(err);
+        });
+    }
+  });
+});
+
 module.exports = router;
