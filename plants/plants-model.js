@@ -27,15 +27,10 @@ async function updatePlant(id, updated) {
   await db("plants").where({ id }).update(updated);
 }
 
-function deletePlant(id) {
-  return db("plants").where("id", Number(id)).del();
-}
-
 module.exports = {
   findPlants,
   addPlant,
   findPlantById,
   findPlantBy,
   updatePlant,
-  deletePlant,
 };

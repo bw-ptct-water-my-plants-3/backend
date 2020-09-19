@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Plants = require("./plants-model");
 const restrict = require("../middleware/authenticate");
+const db = require("../database/config");
 
 router.get("/", restrict(), async (req, res, next) => {
   try {
@@ -72,6 +73,16 @@ router.post("/plants", async (req, res, next) => {
       h2oFrequency,
     });
     res.status(201).json(newPlant);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete("/:id/plants", async (req, res, next) => {
+  try {
+    await db("plants").where("id", req.params.id).del();
+
+    res.status(204).end();
   } catch (err) {
     next(err);
   }
