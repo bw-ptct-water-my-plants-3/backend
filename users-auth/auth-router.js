@@ -47,7 +47,7 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const { username, password, id } = req.body;
+    const {username, password} = req.body;
     const user = await Users.findBy({ username }).first();
 
     if (!req.body.username || !req.body.password) {
