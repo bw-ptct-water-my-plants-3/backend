@@ -11,7 +11,6 @@ router.get("/", restrict(), async (req, res, next) => {
   }
 });
 
-
 router.get("/:id/plants", async (req, res, next) => {
   const { id } = req.params;
 
@@ -32,7 +31,7 @@ router.get("/:id/plants", async (req, res, next) => {
   }
 });
 
-// get plant by id 
+// get plant by id
 router.get("/:user_id/plants/:id", async (req, res, next) => {
   try {
     const userID = req.params.user_id;
@@ -43,9 +42,7 @@ router.get("/:user_id/plants/:id", async (req, res, next) => {
         if (data) {
           res.json(data);
         } else {
-          res
-            .status(404)
-            .json({ message: "plant with said ID not found" });
+          res.status(404).json({ message: "plant with said ID not found" });
         }
       });
   } catch (err) {
