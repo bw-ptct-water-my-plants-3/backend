@@ -36,7 +36,7 @@ server.use(
   })
 );
 
-server.use("/users/", usersRouter);
+server.use("/users/", restrict(), usersRouter);
 server.use("/auth", authRouter);
 server.use("/", welcomeRouter);
 
