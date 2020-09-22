@@ -31,6 +31,15 @@ exports.seed = function (knex) {
           image:
             "https://www.google.com/search?q=roses&sxsrf=ALeKk01LiHyP0ljcMgipOUZTEmNBmuizZg:1600392332382&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiz8OODxvHrAhUYrZ4KHfTUCykQ_AUoAXoECBoQAw&biw=1920&bih=937#imgrc=Azs_hsFLA07_uM",
         },
+        {
+          id: 5,
+          user_id: 4,
+          nickname: "sunflower",
+          species: "annualforbof",
+          h2oFrequency: 2,
+          image:
+            "https://images.search.yahoo.com/search/images;_ylt=Awr9Imc9DWRf9k0Ar3JXNyoA;_ylu=Y29sbwNncTEEcG9zAzEEdnRpZAMEc2VjA3BpdnM-?p=sunflower&fr2=piv-web&fr=mcafee#id=2&iurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fa%2Fa9%2FA_sunflower.jpg&action=click",
+        },
       ]);
     });
 };

@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 exports.seed = function (knex) {
   return knex("users")
     .truncate()
@@ -23,6 +25,12 @@ exports.seed = function (knex) {
           password:
             "$2a$08$iyhWJQNxE8IPeP9u.a/UYeVL.mxigsKy/5.YIe.daDxrjjXw5niR.",
           phoneNumber: "420-420-420",
+        },
+        {
+          id: 4,
+          username: "test4",
+          password: bcrypt.hashSync("valid_password"),
+          phoneNumber: "345-567-789",
         },
       ]);
     });

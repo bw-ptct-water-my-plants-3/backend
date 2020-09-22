@@ -20,9 +20,7 @@ module.exports = {
   // For testing later
   testing: {
     client: "sqlite3",
-    connection: {
-      filename: "./database/test.db3",
-    },
+    connection: ":memory:",
     useNullAsDefault: true,
     migrations: {
       directory: "./database/migrations",
