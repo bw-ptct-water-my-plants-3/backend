@@ -23,3 +23,12 @@ test("GET /:user_id/plants/, when logged in", async () => {
   expect(res.statusCode).toBe(200);
   expect(res.type).toBe("application/json");
 });
+
+test("GET /:user_id/plants/, when token is invalid", async () => {
+  const res = await supertest(server)
+    .get("/users/4/plants/")
+    .set("Authorization", "invalid_token");
+
+  expect(res.statusCode).toBe(401);
+  expect(res.type).toBe("application/json");
+});
