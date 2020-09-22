@@ -7,7 +7,7 @@ exports.up = async function (knex) {
   });
 
   await knex.schema.createTable("plants", (tbl) => {
-    tbl.increments().unsigned().primary();
+    tbl.increments('id').unsigned().primary();
     tbl
       .integer("user_id")
       .references("id")
