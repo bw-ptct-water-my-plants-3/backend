@@ -1,6 +1,5 @@
 const router = require("express").Router({ mergeParams: true });
 const plants = require("./plants-model");
-const restrict = require("../middleware/authenticate");
 const users = require("../users/users-model");
 
 router.put("/:id", async (req, res, next) => {

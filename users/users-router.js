@@ -3,9 +3,9 @@ const router = require("express").Router();
 
 const users = require("./users-model");
 const plantsRouter = require("../plants/plants-router");
-const restrict = require("../middleware/authenticate");
 
-router.get("/", restrict(), async (req, res, next) => {
+
+router.get("/", async (req, res, next) => {
   try {
     res.json(await users.find());
   } catch (err) {
@@ -13,7 +13,7 @@ router.get("/", restrict(), async (req, res, next) => {
   }
 });
 
-router.get("/:id", restrict(), async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
 
