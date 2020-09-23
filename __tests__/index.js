@@ -47,3 +47,18 @@ test("POST /:user_id/plants/, posting a plant when logged in", async () => {
   expect(newPlant.statusCode).toBe(201);
   expect(newPlant.type).toBe("application/json");
 });
+
+test("POST /:user_id/plants/, posting a plant while logged in with missing fields", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password",
+  });
+
+  const newPlant = await supertest(server)
+    .post(`/users/${loginRes.body.userid}/plants/`)
+    .set("Authorization", loginRes.body.token)
+    .send({ nickname: "wowcoolPlant", species: "outtathisworld" });
+
+  expect(newPlant.statusCode).toBe(400);  
+  expect(newPlant.type).toBe("application/json");
+});

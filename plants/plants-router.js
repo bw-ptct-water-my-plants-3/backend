@@ -84,6 +84,11 @@ router.post("/", async (req, res, next) => {
     const { nickname, species, h2oFrequency, image } = req.body;
     const { user_id } = req.params;
 
+    const invalidInput = !nickname || !species || !h2oFrequency;
+    if (invalidInput) {
+      return res.status(400).json({ message: "These fields are required" });
+    }
+
     const plant = await plants.findPlantBy({ nickname }).first();
     if (plant) {
       return res.status(409).json({
@@ -100,6 +105,7 @@ router.post("/", async (req, res, next) => {
     });
     res.status(201).json(newPlant);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
