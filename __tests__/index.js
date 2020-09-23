@@ -10,7 +10,7 @@ beforeEach(async () => {
   await db.seed.run();
 });
 
-test("GET /:user_id/plants/, when logged in", async () => {
+test("GET /:user_id/plants/, getting array of plants when logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
     username: "test4",
     password: "valid_password",
@@ -24,11 +24,26 @@ test("GET /:user_id/plants/, when logged in", async () => {
   expect(res.type).toBe("application/json");
 });
 
-test("GET /:user_id/plants/, when token is invalid", async () => {
+test("GET /:user_id/plants/, getting array of plants when token is invalid", async () => {
   const res = await supertest(server)
     .get("/users/4/plants/")
     .set("Authorization", "invalid_token");
 
   expect(res.statusCode).toBe(401);
   expect(res.type).toBe("application/json");
+});
+
+test("POST /:user_id/plants/, posting a plant when logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password",
+  });
+
+  const newPlant = await supertest(server)
+    .post(`/users/${loginRes.body.userid}/plants/`)
+    .set("Authorization", loginRes.body.token)
+    .send({ nickname: "nebula", species: "astronomical", h2oFrequency: 5 });
+
+  expect(newPlant.statusCode).toBe(201);
+  expect(newPlant.type).toBe("application/json");
 });
