@@ -59,6 +59,19 @@ test("POST /:user_id/plants/, posting a plant while logged in with missing field
     .set("Authorization", loginRes.body.token)
     .send({ nickname: "wowcoolPlant", species: "outtathisworld" });
 
-  expect(newPlant.statusCode).toBe(400);  
+  expect(newPlant.statusCode).toBe(400);
   expect(newPlant.type).toBe("application/json");
+});
+
+test("DELETE /:user_id/plants/:id, deleting a specific plant while logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password",
+  });
+
+  const deletedPlant = await supertest(server)
+    .delete(`/users/${loginRes.body.userid}/plants/5`)
+    .set("Authorization", loginRes.body.token);
+
+  expect(deletedPlant.statusCode).toBe(204);
 });
