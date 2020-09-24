@@ -55,7 +55,9 @@ describe("register", () => {
       phoneNumber: "40000005",
     });
     expect(res.statusCode).toBe(401);
-    expect(res.body.message).toBe("username, password, and phonenumber are REQUIRED")
+    expect(res.body.message).toBe(
+      "username, password, and phonenumber are REQUIRED"
+    );
   });
   it("gets a 409 on .unique username constraint/usertaken ", async () => {
     const res = await request(server).post("/auth/register").send({
@@ -64,7 +66,7 @@ describe("register", () => {
       phoneNumber: "40000005",
     });
     expect(res.statusCode).toBe(409);
-    expect(res.body.message).toBe("Username is already taken")
+    expect(res.body.message).toBe("Username is already taken");
   });
   it("returns 401 due to name length db constraint", async () => {
     const res = await request(server).post("/auth/register").send({
@@ -73,7 +75,7 @@ describe("register", () => {
       phoneNumber: "40000005",
     });
     expect(res.statusCode).toBe(401);
-    expect(res.body.message).toBe("Username can NOT exceed 20 characters")
+    expect(res.body.message).toBe("Username can NOT exceed 20 characters");
   });
   it("gets a 409 on .unique phoneNumber constraint", async () => {
     const res = await request(server).post("/auth/register").send({
@@ -82,7 +84,7 @@ describe("register", () => {
       phoneNumber: "867-5309",
     });
     expect(res.statusCode).toBe(409);
-    expect(res.body.message).toBe("This phone number is already in use")
+    expect(res.body.message).toBe("This phone number is already in use");
   });
 });
 
