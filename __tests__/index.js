@@ -13,36 +13,30 @@ afterAll(async () => {
 });
 
 // -----------AUTH-----------
-describe("auth via JWT working",  () => {
-    it('grants auth with valid creds', async () => {
-        const res = await request(server)
-          .post('/auth/login')
-          .send({
-            username: "test1",
-            password: "password",
-          })
-          expect(res.statusCode).toBe(200)
-    })
-    it('def does NOT with bad creds, resulting in 401 and no token', async () => {
-        const res = await request(server)
-          .post('/auth/login')
-          .send({
-            username: "notAuth'd",
-            password: "password",
-          })
-          expect(res.statusCode).toBe(401)
-          expect(res.body.token).toBe(undefined)
-    })
-    it('Returns status 400 due to missing req.body.password', async () => {
-        const res = await request(server)
-          .post('/auth/login')
-          .send({
-            username: "notAuth'd"
-          })
-          expect(res.statusCode).toBe(400)
-          expect(res.body.message).toBe("Please enter a username and password")
-    })
-})
+describe("auth via JWT working", () => {
+  it("grants auth with valid creds", async () => {
+    const res = await request(server).post("/auth/login").send({
+      username: "test1",
+      password: "password",
+    });
+    expect(res.statusCode).toBe(200);
+  });
+  it("def does NOT with bad creds, resulting in 401 and no token", async () => {
+    const res = await request(server).post("/auth/login").send({
+      username: "notAuth'd",
+      password: "password",
+    });
+    expect(res.statusCode).toBe(401);
+    expect(res.body.token).toBe(undefined);
+  });
+  it("Returns status 400 due to missing req.body.password", async () => {
+    const res = await request(server).post("/auth/login").send({
+      username: "notAuth'd",
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toBe("Please enter a username and password");
+  });
+});
 
 // -----------REGISTER-------------
 describe("register", () => {
@@ -56,8 +50,8 @@ describe("register", () => {
   });
   it("returns a 401 due to missing req.body.username ", async () => {
     const res = await request(server).post("/auth/register").send({
-      password: "password",
-      phoneNumber: "40000005",
+      username:"test1234",
+      phoneNumber: "123456789",
     });
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe(
