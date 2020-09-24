@@ -46,3 +46,47 @@ describe("auth via JWT working",  () => {
           expect(res.body.message).toBe("Please enter a username and password")
     })
 })
+
+// -----------REGISTER-------------
+describe("register",  () => {
+    it('returns 201', async () => {
+        const res = await request(server)
+            .post("/auth/register")
+            .send({
+                username: "user100",
+                password: "password",
+                phoneNumber: "40000005"
+            })
+            expect(res.statusCode).toBe(201)
+    })
+    it('gets a 409 on .unique username constraint/usertaken ', async () => {
+        const res = await request(server)
+            .post("/auth/register")
+            .send({
+                username: "test1",
+                password: "password",
+                phoneNumber: "40000005"
+            })
+            expect(res.statusCode).toBe(409)
+    })
+    it('returns 401 due to name length db constraint', async () => {
+        const res = await request(server)
+            .post("/auth/register")
+            .send({
+                username: "tesasdasdasasdasddasdasdasdt1",
+                password: "password",
+                phoneNumber: "40000005"
+            })
+            expect(res.statusCode).toBe(401)
+    })
+    it('gets a 409 on .unique phoneNumber constraint', async () => {
+        const res = await request(server)
+            .post("/auth/register")
+            .send({
+                username: "test100000",
+                password: "password",
+                phoneNumber: "867-5309"
+            })
+            expect(res.statusCode).toBe(409)
+    })
+})
