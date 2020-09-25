@@ -75,3 +75,16 @@ test("DELETE /:user_id/plants/:id, deleting a specific plant while logged in", a
 
   expect(deletedPlant.statusCode).toBe(204);
 });
+
+test("DELETE /:user_id/plants/:id, deleting a specific plant whie logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password",
+  });
+
+  const doesNotExist = await supertest(server)
+    .delete(`/users/${loginRes.body.userid}/plants/10`)
+    .set("Authorization", loginRes.body.token);
+
+  expect(doesNotExist.statusCode).toBe(404);
+});

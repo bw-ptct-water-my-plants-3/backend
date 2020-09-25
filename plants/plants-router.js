@@ -34,8 +34,14 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    await plants.deletePlant(req.params.id);
-    res.status(204).end();
+    const plant = await plants.findPlantById(req.params.user_id, req.params.id);
+
+    if (!plant) {
+      res.status(404).json({ message: "The specific plant does not exist" });
+    } else {
+      await plants.deletePlant(req.params.id);
+      res.status(204).end();
+    }
   } catch (err) {
     next(err);
   }
