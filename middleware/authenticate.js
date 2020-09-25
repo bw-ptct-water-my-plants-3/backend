@@ -12,14 +12,18 @@ function restrict() {
         return res.status(401).json(authError);
       }
 
-      jwt.verify(token, process.env.SECRET, (err, decoded) => {
-        if (err) {
-          return res.status(401).json(authError);
-        }
-        req.token = decoded;
+      jwt.verify(
+        token,
+        process.env.SECRET || "default secret",
+        (err, decoded) => {
+          if (err) {
+            return res.status(401).json(authError);
+          }
+          req.token = decoded;
 
-        next();
-      });
+          next();
+        }
+      );
     } catch (err) {
       next(err);
     }
