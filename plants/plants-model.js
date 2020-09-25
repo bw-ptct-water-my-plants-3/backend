@@ -1,17 +1,27 @@
 const db = require("../database/config");
 
-function findPlants() {
-  return db("plants");
+function findPlants(id) {
+  return db("plants")
+    .join("users", "users.id", "plants.user_id")
+    .select(
+      "plants.id",
+      "plants.user_id",
+      "plants.nickname",
+      "plants.species",
+      "plants.h2oFrequency",
+      "plants.image"
+    )
+    .where({ user_id: id }); // where user_id = id
 }
 
 async function addPlant(plant) {
-  const [id] = await db("plants").insert(plant);
-  return findById(id);
+  const [id] = await db("plants").insert(plant, "id");
+  return findPlantById(plant.user_id, id);
 }
 
-async function findPlantById(user_id, plant_id) {
+async function findPlantById(user_id, id) {
   return db("plants")
-    .where("id", plant_id)
+    .where("id", id)
     .first()
     .andWhere("user_id", user_id)
     .first();

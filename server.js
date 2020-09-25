@@ -15,7 +15,6 @@ server.use(
 const restrict = require("./middleware/authenticate");
 const authRouter = require("./users-auth/auth-router.js");
 const usersRouter = require("./users/users-router");
-const plantsRouter = require("./plants/plants-router");
 const welcomeRouter = require("./welcome");
 
 server.use((req, res, next) => {
@@ -37,8 +36,7 @@ server.use(
   })
 );
 
-server.use("/users/", usersRouter);
-server.use("/plants/", plantsRouter);
+server.use("/users/", restrict(), usersRouter);
 server.use("/auth", authRouter);
 server.use("/", welcomeRouter);
 

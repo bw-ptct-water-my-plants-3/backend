@@ -1,21 +1,21 @@
-const router = require("express").Router();
-const Users = require("./users-model");
-const restrict = require("../middleware/authenticate");
 const bcrypt = require("bcryptjs");
+const router = require("express").Router();
+const users = require("./users-model");
+const plantsRouter = require("../plants/plants-router");
 
-router.get("/", restrict(), async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    res.json(await Users.find());
+    res.json(await users.find());
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:id", restrict(), async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    await Users.findById(id).then((payload) => {
+    await users.findById(id).then((payload) => {
       if (payload) {
         res.json(payload);
       } else {
@@ -44,12 +44,13 @@ router.put("/:id", async (req, res, next) => {
       .status(400)
       .json({ message: "Please include password and phonenumber" });
   }
-  Users.findById(id) // find user via params and update new info
+  users
+    .findById(id) // find user via params and update new info
     .then((user) => {
       if (!user) {
         res.status(404).json({ message: "Could not find user by said ID." });
       } else {
-        Users.update(id, updatedata);
+        users.update(id, updatedata);
         res
           .status(200)
           .json({ message: `updated user ${id}` })
@@ -60,5 +61,7 @@ router.put("/:id", async (req, res, next) => {
       }
     });
 });
+
+router.use("/:user_id/plants/", plantsRouter);
 
 module.exports = router;
