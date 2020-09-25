@@ -104,3 +104,17 @@ test("PUT /:user_id/plants/:id, editing a specific plant while logged in", async
 
   expect(editPlant.statusCode).toBe(200)
 })
+
+test("PUT /:user_id/plants/:id, editing a specific plant with missing fields while logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username:"test4",
+    password: "valid_password"
+  })
+
+  const editPlant = await supertest(server)
+  .put(`/users/${loginRes.body.userid}/plants/5`)
+  .set("Authorization", loginRes.body.token)
+  .send({ nickname: "titan", species: "SaturnsMoon" })
+  
+  expect(editPlant.statusCode).toBe(400)
+})
