@@ -6,14 +6,15 @@ const Users = require("./auth-model");
 router.post("/register", async (req, res, next) => {
   try {
     const { username, password, phoneNumber } = req.body;
-    const user = await Users.findBy({ username }).first();
-    const phonenumber = await Users.findBy({ phoneNumber }).first();
 
     if (!username || !password || !phoneNumber) {
       res
         .status(401)
         .json({ message: "username, password, and phonenumber are REQUIRED" });
     }
+
+    const user = await Users.findBy({ username }).first();
+    const phonenumber = await Users.findBy({ phoneNumber }).first();
 
     if (username.length > 20) {
       res

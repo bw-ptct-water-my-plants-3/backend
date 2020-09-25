@@ -52,10 +52,20 @@ describe("register", () => {
     });
     expect(res.statusCode).toBe(201);
   });
-  it("returns a 401 due to missing req.body.username ", async () => {
+  it("returns a 401 due to missing req.body.password ", async () => {
     const res = await request(server).post("/auth/register").send({
       username: "test1234",
       phoneNumber: "123456789",
+    });
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe(
+      "username, password, and phonenumber are REQUIRED"
+    );
+  });
+  it("returns a 401 due to a missing req.body.phoneNumber", async () => {
+    const res = await request(server).post("/auth/register").send({
+      username: "test1234",
+      password: "validPassword",
     });
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe(
