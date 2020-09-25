@@ -74,7 +74,7 @@ router.post("/login", async (req, res, next) => {
       {
         userID: user.id,
       },
-      process.env.SECRET,
+      process.env.SECRET || "default secret",
       { expiresIn: "1d" }
     );
 
