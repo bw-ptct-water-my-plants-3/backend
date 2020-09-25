@@ -15,12 +15,11 @@ afterAll(async () => {
 // -----------AUTH-----------
 describe("auth via JWT working", () => {
   it("grants auth with valid creds", async () => {
-    let token;
     const res = await request(server).post("/auth/login").send({
       username: "test1",
       password: "password",
     });
-    expect(res.body.token).toBe(token);
+    expect(res.statusCode).toBe(200);
   });
   it("def does NOT with bad creds, resulting in 401 and no token", async () => {
     const res = await request(server).post("/auth/login").send({
@@ -51,8 +50,8 @@ describe("register", () => {
   });
   it("returns a 401 due to missing req.body.username ", async () => {
     const res = await request(server).post("/auth/register").send({
-      password: "password",
-      phoneNumber: "40000005",
+      username: "test1234",
+      phoneNumber: "123456789",
     });
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe(
@@ -92,7 +91,15 @@ describe("register", () => {
 //---------GET USERS--------------
 describe("get users", () => {
   it("Should return Users tbl with a .length >= 3 (seed array length)", async () => {
-    const res = await request(server).get("/users");
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
+      password: "password",
+    });
+
+    const res = await request(server)
+      .get("/users/")
+      .set("Authorization", auth.body.token);
+
     expect(res.statusCode).toBe(200);
     expect(res.type).toBe("application/json");
     expect(res.body.length).toBeGreaterThanOrEqual(3);
@@ -102,19 +109,43 @@ describe("get users", () => {
 // -------GET USER BY :ID----------
 describe("get user by :id", () => {
   it("should specific Json data (username) of users/1", async () => {
-    const res = await request(server).get("/users/1");
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
+      password: "password",
+    });
+    const res = await request(server)
+      .get("/users/1")
+      .set("Authorization", auth.body.token);
+
     expect(res.statusCode).toBe(200);
     expect(res.type).toBe("application/json");
     expect(res.body.username).toBe("test1");
     expect(res.body.phoneNumber).toBe("867-5309");
   });
   it("Shouldn't allow the hashed password to be returned (resulting in undefined)", async () => {
-    const res = await request(server).get("/users/1");
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
+      password: "password",
+    });
+
+    const res = await request(server)
+      .get("/users/1")
+      .set("Authorization", auth.body.token);
+
     expect(res.body.password).toBe(undefined);
     expect(res.statusCode).toBe(200);
   });
+
   it("Should return status 404 if user doesn't exist", async () => {
-    const res = await request(server).get("/users/10");
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
+      password: "password",
+    });
+
+    const res = await request(server)
+      .get("/users/10")
+      .set("Authorization", auth.body.token);
+
     expect(res.statusCode).toBe(404);
   });
 });
@@ -122,16 +153,42 @@ describe("get user by :id", () => {
 // ----------- PUT/EDIT USER ----------
 describe("put/edit user info", () => {
   it("Returns status 400 due to not providing a phoneNumber", async () => {
-    const res = await request(server).put("/users/1").send({
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
       password: "password",
     });
+
+    const res = await request(server)
+      .put("/users/1")
+      .set("Authorization", auth.body.token)
+      .send({
+        password: "password",
+      });
     expect(res.statusCode).toEqual(400);
   });
   it("Returns status 404 body is sent, but the user is not found", async () => {
-    const res = await request(server).put("/users/10").send({
+    const auth = await request(server).post("/auth/login").send({
+      username: "test1",
       password: "password",
-      phoneNumber: "12345",
     });
+
+    const res = await request(server)
+      .put("/users/10")
+      .set("Authorization", auth.body.token)
+      .send({
+        password: "password",
+        phoneNumber: "12345",
+      });
+
     expect(res.statusCode).toEqual(404);
+  });
+});
+
+//--------------middleware-------------
+describe("middleware", () => {
+  it("Should return 401 without valid token", async () => {
+    const res = await request(server).get("/users/");
+
+    expect(res.statusCode).toBe(401);
   });
 });
