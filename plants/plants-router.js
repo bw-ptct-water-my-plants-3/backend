@@ -17,25 +17,31 @@ router.put("/:id", async (req, res, next) => {
   if (!updateNickname || !updateSpecies || !h2oFrequency) {
     return res.status(400).json({ message: "All fields must are required" });
   }
-  plants.findPlantById(user_id, id).then((plant) => {
-    if (!plant) {
-      res.status(404).json({ message: "Could not find the specific plant" });
-    } else {
-      plants.updatePlant(id, updateData);
-      res
-        .status(200)
-        .json({ message: `updated plant ${id}` })
-        .catch((err) => {
-          next(err);
-        });
-    }
-  });
+  plants
+    .findPlantById(user_id, id)
+    .then((plant) => {
+      if (!plant) {
+        res.status(404).json({ message: "Could not find the specific plant" });
+      } else {
+        plants.updatePlant(id, updateData);
+        res.status(200).json({ message: `updated plant ${id}` });
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    await plants.deletePlant(req.params.id);
-    res.status(204).end();
+    const plant = await plants.findPlantById(req.params.user_id, req.params.id);
+
+    if (!plant) {
+      res.status(404).json({ message: "The specific plant does not exist" });
+    } else {
+      await plants.deletePlant(req.params.id);
+      res.status(204).end();
+    }
   } catch (err) {
     next(err);
   }
@@ -69,7 +75,7 @@ router.get("/:id", async (req, res, next) => {
       .findPlantById(userID, id) //user ref & plant id
       .then((data) => {
         if (data) {
-          res.json(data);
+          res.status(200).json(data);
         } else {
           res.status(404).json({ message: "plant with said ID not found" });
         }
@@ -83,6 +89,11 @@ router.post("/", async (req, res, next) => {
   try {
     const { nickname, species, h2oFrequency, image } = req.body;
     const { user_id } = req.params;
+
+    const invalidInput = !nickname || !species || !h2oFrequency;
+    if (invalidInput) {
+      return res.status(400).json({ message: "These fields are required" });
+    }
 
     const plant = await plants.findPlantBy({ nickname }).first();
     if (plant) {
@@ -100,6 +111,7 @@ router.post("/", async (req, res, next) => {
     });
     res.status(201).json(newPlant);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
