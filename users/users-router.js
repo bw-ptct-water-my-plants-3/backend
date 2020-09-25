@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const router = require("express").Router();
-
 const users = require("./users-model");
 const plantsRouter = require("../plants/plants-router");
 
