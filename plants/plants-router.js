@@ -75,7 +75,7 @@ router.get("/:id", async (req, res, next) => {
       .findPlantById(userID, id) //user ref & plant id
       .then((data) => {
         if (data) {
-          res.json(data);
+          res.status(200).json(data);
         } else {
           res.status(404).json({ message: "plant with said ID not found" });
         }

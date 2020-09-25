@@ -10,6 +10,21 @@ beforeEach(async () => {
   await db.seed.run();
 });
 
+test("GET /:user_id/plants/:id, getting a plant by ID while logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password"
+  })
+
+  const specificPlant = await supertest(server)
+  .get(`/users/${loginRes.body.userid}/plants/5`)
+  .set("Authorization", loginRes.body.token)
+
+  expect(specificPlant.statusCode).toBe(200)
+})
+
+
+
 
 
 test("GET /:user_id/plants/, getting array of plants when logged in", async () => {
@@ -118,3 +133,4 @@ test("PUT /:user_id/plants/:id, editing a specific plant with missing fields whi
   
   expect(editPlant.statusCode).toBe(400)
 })
+
