@@ -17,19 +17,19 @@ router.put("/:id", async (req, res, next) => {
   if (!updateNickname || !updateSpecies || !h2oFrequency) {
     return res.status(400).json({ message: "All fields must are required" });
   }
-  plants.findPlantById(user_id, id).then((plant) => {
-    if (!plant) {
-      res.status(404).json({ message: "Could not find the specific plant" });
-    } else {
-      plants.updatePlant(id, updateData);
-      res
-        .status(200)
-        .json({ message: `updated plant ${id}` })
-        .catch((err) => {
-          next(err);
-        });
-    }
-  });
+  plants
+    .findPlantById(user_id, id)
+    .then((plant) => {
+      if (!plant) {
+        res.status(404).json({ message: "Could not find the specific plant" });
+      } else {
+        plants.updatePlant(id, updateData);
+        res.status(200).json({ message: `updated plant ${id}` });
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 router.delete("/:id", async (req, res, next) => {

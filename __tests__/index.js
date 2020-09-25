@@ -10,6 +10,8 @@ beforeEach(async () => {
   await db.seed.run();
 });
 
+
+
 test("GET /:user_id/plants/, getting array of plants when logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
     username: "test4",
@@ -88,3 +90,17 @@ test("DELETE /:user_id/plants/:id, deleting a specific plant that does not exist
 
   expect(doesNotExist.statusCode).toBe(404);
 });
+
+test("PUT /:user_id/plants/:id, editing a specific plant while logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password"
+  })
+
+  const editPlant = await supertest(server)
+  .put(`/users/${loginRes.body.userid}/plants/5`)
+  .set("Authorization", loginRes.body.token)
+  .send({ nickname: "titan", species: "SaturnsMoon", h2oFrequency: 9 })
+
+  expect(editPlant.statusCode).toBe(200)
+})
