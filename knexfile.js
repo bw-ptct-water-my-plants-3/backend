@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   development: {
@@ -28,7 +28,7 @@ module.exports = {
     seeds: {
       directory: "./database/seeds",
     },
-    },
+  },
   testing: {
     client: "sqlite3",
     connection: {
