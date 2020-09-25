@@ -13,19 +13,28 @@ beforeEach(async () => {
 test("GET /:user_id/plants/:id, getting a plant by ID while logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
     username: "test4",
-    password: "valid_password"
-  })
+    password: "valid_password",
+  });
 
   const specificPlant = await supertest(server)
-  .get(`/users/${loginRes.body.userid}/plants/5`)
-  .set("Authorization", loginRes.body.token)
+    .get(`/users/${loginRes.body.userid}/plants/5`)
+    .set("Authorization", loginRes.body.token);
 
-  expect(specificPlant.statusCode).toBe(200)
-})
+  expect(specificPlant.statusCode).toBe(200);
+});
 
+test("GET /:user_id/plants/:id, getting a plant by ID that does not exist while logged in", async () => {
+  const loginRes = await supertest(server).post("/auth/login").send({
+    username: "test4",
+    password: "valid_password",
+  });
 
+  const specificPlant = await supertest(server)
+    .get(`/users/${loginRes.body.userid}/plants/10`)
+    .set("Authorization", loginRes.body.token);
 
-
+  expect(specificPlant.statusCode).toBe(404);
+});
 
 test("GET /:user_id/plants/, getting array of plants when logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
@@ -109,28 +118,27 @@ test("DELETE /:user_id/plants/:id, deleting a specific plant that does not exist
 test("PUT /:user_id/plants/:id, editing a specific plant while logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
     username: "test4",
-    password: "valid_password"
-  })
+    password: "valid_password",
+  });
 
   const editPlant = await supertest(server)
-  .put(`/users/${loginRes.body.userid}/plants/5`)
-  .set("Authorization", loginRes.body.token)
-  .send({ nickname: "titan", species: "SaturnsMoon", h2oFrequency: 9 })
+    .put(`/users/${loginRes.body.userid}/plants/5`)
+    .set("Authorization", loginRes.body.token)
+    .send({ nickname: "titan", species: "SaturnsMoon", h2oFrequency: 9 });
 
-  expect(editPlant.statusCode).toBe(200)
-})
+  expect(editPlant.statusCode).toBe(200);
+});
 
 test("PUT /:user_id/plants/:id, editing a specific plant with missing fields while logged in", async () => {
   const loginRes = await supertest(server).post("/auth/login").send({
-    username:"test4",
-    password: "valid_password"
-  })
+    username: "test4",
+    password: "valid_password",
+  });
 
   const editPlant = await supertest(server)
-  .put(`/users/${loginRes.body.userid}/plants/5`)
-  .set("Authorization", loginRes.body.token)
-  .send({ nickname: "titan", species: "SaturnsMoon" })
-  
-  expect(editPlant.statusCode).toBe(400)
-})
+    .put(`/users/${loginRes.body.userid}/plants/5`)
+    .set("Authorization", loginRes.body.token)
+    .send({ nickname: "titan", species: "SaturnsMoon" });
 
+  expect(editPlant.statusCode).toBe(400);
+});
