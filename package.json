@@ -36,7 +36,11 @@
     "supertest": "^4.0.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.8",
     "@types/jest": "^26.0.14",
+    "@types/morgan": "^1.9.1",
     "cross-env": "^7.0.2",
     "eslint": "^7.9.0",
     "eslint-plugin-prettier": "^3.1.4",
