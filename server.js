@@ -6,7 +6,14 @@ const server = express();
 require("dotenv/config");
 
 server.use(helmet());
-server.use(cors({ origin: ["http://localhost:3000"] }));
+server.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://upbeat-kowalevski-d54ea4.netlify.app",
+    ],
+  })
+);
 server.use(express.json());
 server.use(express.urlencoded());
 server.use(
